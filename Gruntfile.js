@@ -1,7 +1,7 @@
 var TAB_SIZE_CSS = 'pre{-moz-tab-size:4;-o-tab-size:4;-webkit-tab-size:4;-ms-tab-size:4;tab-size:4;}';
 
 function mochaCommand(reporter) {
-	return "./node_modules/mocha/bin/mocha --ui tdd --reporter " + reporter + " tests";
+	return "./node_modules/mocha/bin/mocha --ui tdd --reporter " + reporter + " --recursive tests";
 }
 
 function docsCommand(command) {
@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 
 		files: {
 			src: ["src/**/*.js"],
-			tests: ["tests/**/*.js"],
+			tests: ["tests/tests/**/*.js"],
 			watch: ["Gruntfile.js", "<%= files.src %>", "<%= files.tests %>"]
 		},
 
