@@ -271,11 +271,11 @@ var filterPeople = variadic(function(v) {
     });
 });
 
-filterPeople(/\bjoe\b/);                // matches form 1
-filterPeople(18);                       // matches form 2
-filterPeople(/\bjoe\b/, 18);            // matches form 3
-filterPeople(18, 25);                   // matches form 4
-filterPeople(/\bjoe\b/, 18, 25);        // matches form 5
+filterPeople(yourList, /\bjoe\b/);                // matches form 1
+filterPeople(yourList, 18);                       // matches form 2
+filterPeople(yourList, /\bjoe\b/, 18);            // matches form 3
+filterPeople(yourList, 18, 25);                   // matches form 4
+filterPeople(yourList, /\bjoe\b/, 18, 25);        // matches form 5
 ```
 
 Using Variadic's optional (`?`) and "no lone" (`*`) flags, we can simplify that down to:
