@@ -14,6 +14,10 @@ Variadic also gives you 'rest' args (as a real-life, honest-to-goodness JavaScri
 
 A side effect of Variadic (or is it?) is that using it produces self-documenting code. Function configuration code acts as an inline document that is very explicit about what types of arguments can be passed in and in what orders.
 
+## Caveats
+
+The wrapper function variadic adds and the code required for argument processing both add to the amount of time required to execute a single call to your function. I don't recommend using variadic in your critical path or for any time-sensitive code. That being said, most of your code probably isn't time-sensitive or executed frequently enough for this to matter, and the benefits you get from cleaner code will far outway the little bit of extra time spent processing arguments.
+
 ## How do I use it?
 
 You use Variadic by calling `variadic` when creating a variadic function. `variadic` takes
