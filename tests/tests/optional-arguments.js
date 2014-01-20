@@ -29,5 +29,24 @@ suite("optional arguments", function() {
 			assert.equal(res.opt.three, true);
 			assert.deepEqual(res.form, ["one", "two", "three"]);
 		});
+
+		test("randomInt", function() {
+			var randomInt = variadic(function(v) {
+				v.number("min", 0).number("max");
+				v.form("?min", "max");
+			}, function(opt) {
+				return opt;
+			});
+
+			var res;
+
+			res = randomInt(10);
+			assert.equal(res.min, 0);
+			assert.equal(res.max, 10);
+
+			res = randomInt(15, 30);
+			assert.equal(res.min, 15);
+			assert.equal(res.max, 30);
+		});
 	});
 });

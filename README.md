@@ -236,20 +236,17 @@ rewritten using variadic:
 
 ```javascript
 var randomInt = variadic(function(v) {
-    v.number("min", 0)
-     .number("max");
-
-    v.form("max")            // form 1: number
-     .form("min", "max");    // form 2: number, number
+    v.number("min", 0).number("max");
+    v.form("?min", "max");
 }, function(opt, rest, form) {
     return Math.floor(Math.random() * (opt.max - opt.min) + opt.min);
 });
 
-randomInt(10);               // matches form 1
-randomInt(4, 15);            // matches form 2
+randomInt(10);               // matches form 1 (max)
+randomInt(4, 15);            // matches form 2 (min, max)
 ```
 
-It's a little bit more code (not by much), but it removes *all* of the plumbing code and helps the actual logic of the function stand out. You only have to look at 1 line of code to know what the function does, not 5.
+It's shorter, removes *all* of the plumbing code, and helps the actual logic of the function stand out. You only have to look at 1 line of code to know what the function does, not 5.
 
 ### A less basic example
 
