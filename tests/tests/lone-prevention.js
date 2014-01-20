@@ -65,14 +65,14 @@ suite("lone prevention", function() {
         assert.equal(res.opt.two, 2);
         assert.equal(res.opt.three, true);
         assert.equal(res.opt.four, undefined);
-        assert.deepEqual(res.form, ["one", "two", "three"])
+        assert.deepEqual(res.form, ["one", "two", "three"]);
 
         res = testFn("one", 2, false, "four");
         assert.equal(res.opt.one, "one");
         assert.equal(res.opt.two, 2);
         assert.equal(res.opt.three, false);
         assert.equal(res.opt.four, "four");
-        assert.deepEqual(res.form, ["one", "two", "three", "four"])
+        assert.deepEqual(res.form, ["one", "two", "three", "four"]);
 
         assert.throw(function() {
             testFn("one", 2);

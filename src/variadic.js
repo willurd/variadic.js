@@ -354,6 +354,7 @@ Config.fn.form = function(/* names */) {
 	var i;
 	var len = names.length;
 	var noLoneCount = 0;
+	var flags;
 
 	// Don't add empty forms and don't add the same form twice.
 	if (this._formMap.hasOwnProperty(mapKey)) {
@@ -366,9 +367,7 @@ Config.fn.form = function(/* names */) {
 
 	// Count the "no lone" parameters.
 	for (i = 0; i < len; i++) {
-		var flags = this.getFlags(names[i]);
-
-		if (flags.noLone) {
+		if (this.getFlags(names[i]).noLone) {
 			noLoneCount++;
 		}
 	}
@@ -391,9 +390,7 @@ Config.fn.form = function(/* names */) {
 	// the "sub" forms backwards because we want the optional parameters
 	// that show up first to match first.
 	for (i = len - 1; i >= 0; i--) {
-		var flags = this.getFlags(names[i]);
-
-		if (flags.optional) {
+		if (this.getFlags(names[i]).optional) {
 			this.form.apply(this, names.slice(0, i).concat(names.slice(i + 1)));
 		}
 	}

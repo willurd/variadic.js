@@ -93,13 +93,6 @@ variadic.error = function(message) {
 	log.error(message);
 };
 
-// Variadic Configuration
-// ----------------------
-
-variadic.config = {
-	optionalArgumentRegex: /^\?/
-};
-
 // Function Configuration
 // ----------------------
 
@@ -119,9 +112,48 @@ function Config() {
 	this._descriptors = {};
 	this._forms = [];
 	this._formMap = {};
+	this._flags = [
+		{ name: "optional", symbol: "?" },
+		{ name: "noLone",   symbol: "*" }
+	];
+
+	var flagsList = this._flags.map(function(flag) {
+		return "\\" + flag.symbol;
+	}).join("");
+	this._flagsRegex = new RegExp("^([" + flagsList + "]+)");
+
+	this._flagsMap = {};
+	for (var i = 0, len = this._flags.length; i < len; i++) {
+		var flag = this._flags[i];
+		this._flagsMap[flag.symbol] = flag.name;
+	}
 }
 
 Config.fn = Config.prototype;
+
+// Get the flags from a parameter name.
+Config.fn.getFlags = function(name) {
+	var flagsObject = {};
+	var match = name.match(this._flagsRegex);
+
+	if (!match) {
+		return flagsObject;
+	}
+
+	var flagsList = match[0].split("");
+
+	for (var i = 0, len = flagsList.length; i < len; i++) {
+		var key = this._flagsMap[flagsList[i]];
+		flagsObject[key] = true;
+	}
+
+	return flagsObject;
+};
+
+// Remove the flags from a parameter name.
+Config.fn.removeFlags = function(name) {
+	return name.replace(this._flagsRegex, "");
+};
 
 // TODO: Make sure all of the forms are valid (no duplicates, all args have
 // descriptors, etc).
@@ -137,8 +169,9 @@ Config.fn.process = function(args, fn, context) {
 	}
 
 	var result = this.processArguments(form, args);
+	var names = form.names || [];
 
-	return fn.call(context, result.opt, result.rest, (form.names || []).slice(), args);
+	return fn.call(context, result.opt, result.rest, names, args);
 };
 
 // Get the form that is the best match for the given arguments. This
@@ -216,8 +249,7 @@ Config.fn.rateForm = function(form, args) {
 	if (args) {
 		for (var i = 0; i < names.length; i++) {
 			var arg = args[i];
-			var name = names[i].replace(variadic.config.optionalArgumentRegex, "");
-			var optional = names[i].match(variadic.config.optionalArgumentRegex);
+			var name = names[i];
 			var desc = this._descriptors[name];
 
 			if (!desc) {
@@ -226,9 +258,7 @@ Config.fn.rateForm = function(form, args) {
 			}
 
 			if (!this.checkArg(name, desc, arg)) {
-				if (!optional) {
-					return -1;
-				}
+				return -1;
 			} else if (!desc.any) {
 				rating++;
 			}
@@ -241,9 +271,10 @@ Config.fn.rateForm = function(form, args) {
 };
 
 Config.fn.processArguments = function(form, args) {
+	var names = (form.names || []);
 	var result = {
 		opt: {},
-		rest: args.slice((form.names || []).length)
+		rest: args.slice(names.length)
 	};
 
 	for (var prop in this._descriptors) {
@@ -255,7 +286,7 @@ Config.fn.processArguments = function(form, args) {
 	}
 
 	if (!form.empty) {
-		for (var i = 0, name; name = form.names[i]; i++) {
+		for (var i = 0, name; name = names[i]; i++) {
 			result.opt[name] = args[i];
 		}
 	}
@@ -320,6 +351,10 @@ Config.fn._removeForms = function(testFn) {
 Config.fn.form = function(/* names */) {
 	var names = toArray(arguments);
 	var mapKey = names.join(",");
+	var i;
+	var len = names.length;
+	var noLoneCount = 0;
+	var flags;
 
 	// Don't add empty forms and don't add the same form twice.
 	if (this._formMap.hasOwnProperty(mapKey)) {
@@ -330,22 +365,32 @@ Config.fn.form = function(/* names */) {
 		return this.empty();
 	}
 
+	// Count the "no lone" parameters.
+	for (i = 0; i < len; i++) {
+		if (this.getFlags(names[i]).noLone) {
+			noLoneCount++;
+		}
+	}
+
+	if (noLoneCount === len) {
+		// You must have at least 1 non-"no lone" parameter.
+		return this;
+	}
+
 	// Provide an easy way to know that this form has already been added.
 	this._formMap[mapKey] = true;
 
 	// Add this form.
 	this._forms.push({
 		positional: true,
-		names: names.map(function(name) {
-			return name.replace(variadic.config.optionalArgumentRegex, "");
-		})
+		names: names.map(this.removeFlags, this)
 	});
 
 	// Recursively add more forms if there are optional parameters. Add
 	// the "sub" forms backwards because we want the optional parameters
 	// that show up first to match first.
-	for (var i = names.length - 1; i >= 0; i--) {
-		if (names[i].match(variadic.config.optionalArgumentRegex)) {
+	for (i = len - 1; i >= 0; i--) {
+		if (this.getFlags(names[i]).optional) {
 			this.form.apply(this, names.slice(0, i).concat(names.slice(i + 1)));
 		}
 	}
