@@ -328,7 +328,7 @@ strings("one", "two", "three"); // matches form 3
 
 ### Swapped order
 
-Here's the common `bind` (or `proxy`) function rewritten using Variadic:
+Here's the common `bind` (or `proxy`) function rewritten using Variadic. This version will accept the function and context arguments in either order.
 
 ```javascript
 var bind = variadic(function(v) {
