@@ -1,0 +1,27 @@
+{
+	"name": "variadic",
+	"description": "A tiny library for expressive variadic functions",
+	"keywords": [
+		"variadic", "arguments",
+		"util", "server", "client", "browser"
+	],
+	"author": "William Bowers <william.bowers@gmail.com>",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/willurd/variadic.js"
+	},
+	"devDependencies": {
+		"mocha": "*",
+		"grunt": "*",
+		"grunt-contrib-concat": "*",
+		"grunt-contrib-jshint": "*",
+		"grunt-contrib-uglify": "*",
+		"grunt-contrib-watch": "*",
+		"grunt-exec": "*",
+		"chai": "*",
+		"docco": "*"
+	},
+	"main": "./dist/variadic.js",
+	"version": "0.0.1",
+	"license": "MIT"
+}

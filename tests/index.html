@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Variadic.js Tests</title>
+	<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="../common/highlight/styles/solarized_light.css">
+</head>
+<body>
+	<div id="mocha"></div>
+	<script src="../node_modules/chai/chai.js"></script>
+	<script src="../node_modules/mocha/mocha.js"></script>
+	<script src="../common/highlight/highlight.js"></script>
+	<script src="../src/variadic.js"></script>
+	<script>mocha.setup("tdd")</script>
+	<script src="setup.js"></script>
+
+	<!-- tests -->
+	<script src="tests/variadic.js"></script>
+	<script src="tests/basic.js"></script>
+	<script src="tests/form.js"></script>
+	<script src="tests/similar-forms.js"></script>
+	<script src="tests/rest.js"></script>
+	<script src="tests/defaults.js"></script>
+	<script src="tests/custom-defaults.js"></script>
+	<script src="tests/builtin-descriptors.js"></script>
+	<script src="tests/custom-descriptors.js"></script>
+	<script src="tests/chaining.js"></script>
+	<script src="tests/any.js"></script>
+	<script src="tests/optional-arguments.js"></script>
+	<script src="tests/context.js"></script>
+	<script src="tests/lone-prevention.js"></script>
+	<script src="tests/examples/filtering-a-list.js"></script>
+	<script>
+		var slice = Array.prototype.slice;
+
+		function toArray(obj, from) {
+			return slice.call(obj, from || 0);
+		}
+
+		function resetSnippets() {
+			var snippets = document.querySelectorAll("pre code");
+			toArray(snippets).forEach(function(el) {
+				el.setAttribute("class", "javascript");
+				el.innerText = el.innerText.replace(/^\t\t/gm, "");
+				hljs.highlightBlock(el);
+			});
+		}
+
+		mocha.checkLeaks();
+		mocha.run(resetSnippets);
+	</script>
+</body>
+</html>

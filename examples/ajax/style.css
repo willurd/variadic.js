@@ -1,0 +1,23 @@
+.response-internal {
+	text-decoration: underline;
+}
+
+.response-success {
+	color: #5BA64F;
+	font-weight: bold;
+}
+
+.response-internal.response-success {
+	color: #61717F;
+	font-weight: normal;
+}
+
+.response-error {
+	color: #F43430;
+	font-weight: bold;
+}
+
+.response-internal.response-error {
+	color: #5F5F5F;
+	font-weight: normal;
+}

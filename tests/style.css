@@ -1,0 +1,11 @@
+#mocha .suite .test pre {
+	padding: 0;
+}
+
+#mocha .test pre code {
+	padding: 25px;
+}
+
+#mocha .test pre code .comment {
+	color: #c5c5c5;
+}
