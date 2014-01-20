@@ -332,11 +332,11 @@ Here's the common `bind` (or `proxy`) function rewritten using Variadic:
 
 ```javascript
 var bind = variadic(function(v) {
-    v.func("fn");
-    v.type("context", "object", "an object");      // v.object excludes arrays
+    v.func("fn")
+     .type("context", "object", "an object");      // v.object excludes arrays
 
-    v.form("fn", "context");                       // form 1: function, object
-    v.form("context", "fn");                       // form 2: object, function
+    v.form("fn", "context")                        // form 1: function, object
+     .form("context", "fn");                       // form 2: object, function
 }, function(opt, rest, form) {
     return function() {
         return opt.fn.apply(opt.context, arguments);
