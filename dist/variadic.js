@@ -101,6 +101,8 @@ VariadicError.fn.toString = function() {
 	return this.name + ": " + this.message;
 };
 
+variadic.VariadicError = VariadicError;
+
 // You can override variadic's error handling by setting `variadic.error` to
 // your own function.
 variadic.error = function(message) {
