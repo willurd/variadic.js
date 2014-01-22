@@ -87,10 +87,24 @@ function variadic(configFn, fn, context) {
 // Error reporting
 // ---------------
 
+function VariadicError(message) {
+	this.message = message;
+}
+
+VariadicError.prototype = new Error();
+VariadicError.fn = VariadicError.prototype;
+
+VariadicError.fn.constructor = VariadicError;
+VariadicError.fn.name = "VariadicError";
+
+VariadicError.fn.toString = function() {
+	return this.name + ": " + this.message;
+};
+
 // You can override variadic's error handling by setting `variadic.error` to
 // your own function.
 variadic.error = function(message) {
-	log.error(message);
+	throw new VariadicError(message);
 };
 
 // Function Configuration
@@ -565,68 +579,6 @@ Config.fn.match = function(name, regExp, description, defaultValue) {
 		defaultValue: defaultValue
 	});
 };
-
-// Debug
-// -----
-
-variadic.silent = true;
-
-variadic.debug = function() {
-	function formatMessage(level, method, formatString, args) {
-		return (level ? level + " " : "") +                          // level
-			   "[variadic" + (method ? ("." + method) : "") + "] " + // category
-			   format.apply(null, [formatString].concat(args));      // message
-	}
-
-	function logFunction(name) {
-		var level = name.toUpperCase();
-
-		return function(method, format) {
-			var rest = toArray(arguments, 2);
-			return console[name](formatMessage(level, method, format, rest));
-		};
-	}
-
-	function errorFunction(name) {
-		var level = name.toUpperCase();
-
-		return function(format) {
-			var rest = toArray(arguments, 2);
-
-			if (variadic.silent) {
-				return console[name](formatMessage(level, null, format, rest));
-			} else {
-				throw new Error(formatMessage(null, null, format, rest));
-			}
-		};
-	}
-
-	function logRedirect(name) {
-		return function() {
-			console[name].apply(console, arguments);
-		};
-	}
-
-	log = {
-		debug: logFunction("debug"),
-		info:  logFunction("info"),
-		warn:  logFunction("warn"),
-		error: errorFunction("error"),
-		dir:   logRedirect("dir")
-	};
-};
-
-variadic.production = function() {
-	log = {
-		debug: noop,
-		info: noop,
-		warn: noop,
-		error: noop,
-		dir: noop
-	};
-};
-
-variadic.production();
 
 // Expose
 // ------

@@ -5,7 +5,3 @@ if (typeof require === "function") {
 } else {
 	window.assert = chai.assert;
 }
-
-// Make sure we get errors.
-variadic.debug();
-variadic.silent = false;
