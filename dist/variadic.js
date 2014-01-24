@@ -87,26 +87,12 @@ function variadic(configFn, fn, context) {
 // Error reporting
 // ---------------
 
-function VariadicError(message) {
-	this.message = message;
-}
-
-VariadicError.prototype = new Error();
-VariadicError.fn = VariadicError.prototype;
-
-VariadicError.fn.constructor = VariadicError;
-VariadicError.fn.name = "VariadicError";
-
-VariadicError.fn.toString = function() {
-	return this.name + ": " + this.message;
-};
-
-variadic.VariadicError = VariadicError;
-
 // You can override variadic's error handling by setting `variadic.error` to
 // your own function.
 variadic.error = function(message) {
-	throw new VariadicError(message);
+	var e = new Error(message);
+	e.name = "VariadicError";
+	throw e;
 };
 
 // Function Configuration
@@ -262,25 +248,21 @@ Config.fn.rateForm = function(form, args) {
 
 	var rating = -1;
 
-	if (args) {
-		for (var i = 0; i < names.length; i++) {
-			var arg = args[i];
-			var name = names[i];
-			var desc = this._descriptors[name];
+	for (var i = 0; i < names.length; i++) {
+		var arg = args[i];
+		var name = names[i];
+		var desc = this._descriptors[name];
 
-			if (!desc) {
-				variadic.error(format("Unknown parameter: {0}", name));
-				return -1;
-			}
-
-			if (!this.checkArg(name, desc, arg)) {
-				return -1;
-			} else if (!desc.any) {
-				rating++;
-			}
+		if (!desc) {
+			variadic.error(format("Unknown parameter: {0}", name));
+			return -1;
 		}
-	} else {
-		variadic.error(format("Unknown form: {0}", form));
+
+		if (!this.checkArg(name, desc, arg)) {
+			return -1;
+		} else if (!desc.any) {
+			rating++;
+		}
 	}
 
 	return rating;
