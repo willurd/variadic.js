@@ -1,6 +1,6 @@
 {
 	"name": "variadic",
-	"description": "A tiny library for expressive variadic functions",
+	"description": "A JavaScript library for expressive variadic functions",
 	"keywords": [
 		"variadic", "arguments",
 		"util", "server", "client", "browser"
@@ -8,7 +8,7 @@
 	"author": "William Bowers <william.bowers@gmail.com>",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/willurd/variadic.js"
+		"url": "https://github.com/willurd/variadic.js"
 	},
 	"devDependencies": {
 		"mocha": "*",
