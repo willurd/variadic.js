@@ -1,5 +1,5 @@
 {
-	"name": "variadic",
+	"name": "variadic.js",
 	"description": "A JavaScript library for expressive variadic functions",
 	"keywords": [
 		"variadic", "arguments",
