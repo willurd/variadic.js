@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 		concat: {
 			dist: {
 				src: ["<%= files.src %>"],
-				dest: "dist/<%= pkg.name %>.js"
+				dest: "dist/variadic.js"
 			}
 		},
 
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					"dist/<%= pkg.name %>.min.js": ["<%= concat.dist.dest %>"]
+					"dist/variadic.min.js": ["<%= concat.dist.dest %>"]
 				}
 			}
 		},

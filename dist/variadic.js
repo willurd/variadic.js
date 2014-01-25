@@ -17,33 +17,13 @@ var isFunction = function(value) {
 	return typeof value === "function";
 };
 
-var isString = function(value) {
-	return typeof value === "string";
-};
-
 var isObject = function(value) {
 	return value && typeof value === "object" &&
 		   !isFunction(value) && !isArray(value);
 };
 
-var isBoolean = function(value) {
-	return typeof value === "boolean";
-};
-
-var isNumber = function(value) {
-	return typeof value === "number";
-};
-
 var isRegExp = function(value) {
 	return value instanceof RegExp;
-};
-
-var isNull = function(value) {
-	return !value && isObject(value);
-};
-
-var isUndefined = function(value) {
-	return typeof value === "undefined";
 };
 
 var isDefined = function(value) {
